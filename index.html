@@ -283,20 +283,16 @@ function vPlano(id){
     return `
     <div class="card">
       <label class="f" style="margin-top:0">${mes==='nov'?'Prioridade de novembro · comece pela ★':'Prioridade de dezembro'}</label>
-      <select data-a="p" data-m="${mes}" data-k="${k}" data-f="item">${optsFor(id, r.item ?? '')}</select>
-      ${r.item==='outra' ? `<input type="text" style="margin-top:8px" data-a="p" data-m="${mes}" data-k="${k}" data-f="livre" value="${esc(r.livre)}" placeholder="Escreva a prioridade">` : ''}
-      <label class="f">Responsável</label>
-      <input type="text" data-a="p" data-m="${mes}" data-k="${k}" data-f="resp" value="${esc(r.resp)}" placeholder="Quem faz?">
-      <label class="f">Meta ou entrega</label>
-      <input type="text" data-a="p" data-m="${mes}" data-k="${k}" data-f="meta" value="${esc(r.meta)}" placeholder="O que você faz, e quantas vezes?">
+      <select data-a="p" data-m="${mes}" data-row="${k}" data-f="item">${optsFor(id, r.item ?? '')}</select>
+      ${r.item==='outra' ? `<input type="text" style="margin-top:8px" data-a="p" data-m="${mes}" data-row="${k}" data-f="livre" value="${esc(r.livre)}" placeholder="Escreva a prioridade">` : ''}
       <label class="f">Prazo</label>
-      <input type="date" data-a="p" data-m="${mes}" data-k="${k}" data-f="prazo" value="${esc(r.prazo)}" min="2026-11-05" max="2026-12-31">
+      <input type="date" data-a="p" data-m="${mes}" data-row="${k}" data-f="prazo" value="${esc(r.prazo)}" min="2026-11-05" max="2026-12-31">
     </div>`;
   };
   return `
   <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
   <h2>Plan Fast Result</h2>
-  <p class="hint">Uma prioridade por mês. Na meta, escreva o que <b>você faz</b> (ex.: “responder todo contato em até 15 min”), não só o resultado que quer.</p>
+  <p class="hint">Uma prioridade por mês, escolhida entre os itens que você marcou como <b>Agora</b> ou <b>Delegar</b>, com o prazo para resolver.</p>
   <div class="month">Novembro 2026</div>${row('nov',0)}
   <div class="month">Dezembro 2026</div>${row('dez',0)}
   <div class="card"><b>Check-point semanal:</b> toda segunda-feira, 15 minutos.<br><small>09/11 · 16/11 · 23/11 · 30/11 · 07/12 · 14/12 · 21/12 · 28/12</small></div>`;
@@ -305,7 +301,6 @@ function sugestao(){
   const top = ranking()[0]; if (!top || top.t===0) return '';
   const id = top.c.id, st = S.c[id];
   if (S.mapa[id].acao) return S.mapa[id].acao;
-  const p = st.plano.nov[0]; if (p && p.meta) return p.meta;
   return '';
 }
 function ranking(){
@@ -423,7 +418,7 @@ $('#main').addEventListener('input', e => {
   if (el.dataset.k){ S[el.dataset.k] = el.value; save(); return; }
   if (el.id==='comp'){ S.compromisso = el.checked; save(); return; }
   if (el.dataset.a==='p'){
-    const r = S.c[s.c].plano[el.dataset.m][+el.dataset.k]; r[el.dataset.f] = el.value; save();
+    const r = S.c[s.c].plano[el.dataset.m][+el.dataset.row]; r[el.dataset.f] = el.value; save();
     if (el.dataset.f==='item') rerenderKeepScroll();
   }
   if (el.dataset.a==='mapa'){ S.mapa[el.dataset.c][el.dataset.f] = el.value; save(); }
@@ -464,9 +459,9 @@ function buildPrint(){
   if (S.primeira) h += `<p style="margin-top:8pt"><b>★ A primeira ação, já amanhã:</b> ${esc(S.primeira)}</p>`;
   h += `<h2 class="pb">Plan Fast Result · novembro e dezembro de 2026</h2>`;
   COLMEIAS.forEach(c => {
-    const st = S.c[c.id]; const rows = [...st.plano.nov.map(x=>['Nov',x]), ...st.plano.dez.map(x=>['Dez',x])].filter(([,x]) => prioTxt(c.id,x) || x.meta);
+    const st = S.c[c.id]; const rows = [...st.plano.nov.map(x=>['Nov',x]), ...st.plano.dez.map(x=>['Dez',x])].filter(([,x]) => prioTxt(c.id,x));
     if (!rows.length) return;
-    h += `<p style="margin-top:8pt"><b>${c.n} · ${esc(c.nome)}</b></p><table><tr><th>Mês</th><th>Prioridade</th><th>Responsável</th><th>Meta ou entrega</th><th>Prazo</th></tr>${rows.map(([m,x]) => `<tr><td>${m}</td><td>${esc(prioTxt(c.id,x))}</td><td>${esc(x.resp)}</td><td>${esc(x.meta)}</td><td>${fmt(x.prazo)}</td></tr>`).join('')}</table>`;
+    h += `<p style="margin-top:8pt"><b>${c.n} · ${esc(c.nome)}</b></p><table><tr><th>Mês</th><th>Prioridade</th><th>Prazo</th></tr>${rows.map(([m,x]) => `<tr><td>${m}</td><td>${esc(prioTxt(c.id,x))}</td><td>${fmt(x.prazo)}</td></tr>`).join('')}</table>`;
   });
   h += `<p style="margin-top:10pt">Check-point semanal: toda segunda-feira, 15 minutos · 09/11 · 16/11 · 23/11 · 30/11 · 07/12 · 14/12 · 21/12 · 28/12</p>`;
   $('#print').innerHTML = h;

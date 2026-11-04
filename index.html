@@ -258,13 +258,13 @@ function vMatriz(id){
 }
 function optsFor(id, sel){
   const st = S.c[id];
-  const pri = marked(id).filter(o => st.q[o.i]==='fazer' || st.q[o.i]==='agendar')
-    .sort((a,b) => (st.star===b.i) - (st.star===a.i) || (st.q[a.i]==='fazer' ? -1 : 1));
-  const all = marked(id).filter(o => !pri.includes(o));
+  const byStar = (a,b) => (st.star===b.i) - (st.star===a.i) || a.i - b.i;
+  const agora = marked(id).filter(o => st.q[o.i]==='fazer').sort(byStar);
+  const deleg = marked(id).filter(o => st.q[o.i]==='delegar').sort(byStar);
   const op = o => `<option value="${o.i}" ${String(sel)===String(o.i)?'selected':''}>${st.star===o.i?'★ ':''}${nn(o.i)} · ${esc(itemTxt(id,o.i))}</option>`;
-  return `<option value="">Escolha a prioridade…</option>
-    ${pri.length ? `<optgroup label="Fazer agora e Agendar">${pri.map(op).join('')}</optgroup>` : ''}
-    ${all.length ? `<optgroup label="Outros itens marcados">${all.map(op).join('')}</optgroup>` : ''}
+  return `<option value="">${agora.length||deleg.length ? 'Escolha a prioridade…' : 'Nenhum item em Agora ou Delegar'}</option>
+    ${agora.length ? `<optgroup label="Agora">${agora.map(op).join('')}</optgroup>` : ''}
+    ${deleg.length ? `<optgroup label="Delegar">${deleg.map(op).join('')}</optgroup>` : ''}
     <option value="outra" ${sel==='outra'?'selected':''}>Outra (escrever)</option>`;
 }
 function vPlano(id){

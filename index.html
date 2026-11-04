@@ -273,7 +273,7 @@ function vPlano(id){
     const r = st.plano[mes][k];
     return `
     <div class="card">
-      <label class="f" style="margin-top:0">Prioridade ${k+1}${mes==='nov'&&k===0?' · comece pela ★':''}</label>
+      <label class="f" style="margin-top:0">${mes==='nov'?'Prioridade de novembro · comece pela ★':'Prioridade de dezembro'}</label>
       <select data-a="p" data-m="${mes}" data-k="${k}" data-f="item">${optsFor(id, r.item ?? '')}</select>
       ${r.item==='outra' ? `<input type="text" style="margin-top:8px" data-a="p" data-m="${mes}" data-k="${k}" data-f="livre" value="${esc(r.livre)}" placeholder="Escreva a prioridade">` : ''}
       <label class="f">Responsável</label>
@@ -287,9 +287,9 @@ function vPlano(id){
   return `
   <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
   <h2>Plan Fast Result</h2>
-  <p class="hint">No máximo 3 prioridades por mês. Na meta, escreva o que <b>você faz</b> (ex.: “responder todo contato em até 15 min”), não só o resultado que quer.</p>
-  <div class="month">Novembro 2026</div>${[0,1,2].map(k => row('nov',k)).join('')}
-  <div class="month">Dezembro 2026</div>${[0,1,2].map(k => row('dez',k)).join('')}
+  <p class="hint">Uma prioridade por mês. Na meta, escreva o que <b>você faz</b> (ex.: “responder todo contato em até 15 min”), não só o resultado que quer.</p>
+  <div class="month">Novembro 2026</div>${row('nov',0)}
+  <div class="month">Dezembro 2026</div>${row('dez',0)}
   <div class="card"><b>Check-point semanal:</b> toda segunda-feira, 15 minutos.<br><small>09/11 · 16/11 · 23/11 · 30/11 · 07/12 · 14/12 · 21/12 · 28/12</small></div>`;
 }
 function sugestao(){

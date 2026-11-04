@@ -21,7 +21,7 @@ body{min-height:100dvh;display:flex;flex-direction:column}
 button,input,select,textarea{font:inherit;color:inherit}
 .top{position:sticky;top:0;z-index:10;background:var(--navy);color:var(--cream);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 .top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:680px;margin:0 auto}
-.brand{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.brand{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .where{font-size:14px;font-weight:500;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .menu-btn{background:none;border:1px solid rgba(246,242,233,.35);color:var(--cream);border-radius:10px;padding:6px 12px;font-size:14px;cursor:pointer}
 .bar{height:4px;background:rgba(246,242,233,.18);border-radius:4px;margin:10px auto 0;max-width:680px;overflow:hidden}
@@ -103,6 +103,40 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);bo
 .toast.show{opacity:1}
 .foot{font-size:12px;color:var(--gray);text-align:center;margin-top:24px}
 #print{display:none}
+
+/* ---- animações e gamificação ---- */
+button{transition:transform .08s ease, background-color .18s, border-color .18s, color .18s}
+button:active{transform:scale(.97)}
+.hive{width:44px;height:44px;flex:0 0 44px}
+.hive polygon{fill:transparent;stroke:rgba(246,242,233,.45);stroke-width:1.2;transition:fill .4s, stroke .4s}
+.hive polygon.done{fill:var(--gold);stroke:var(--gold)}
+.hive polygon.cur{stroke:var(--gold);stroke-width:2}
+.hive polygon.mid{fill:rgba(246,242,233,.12)}
+.hive polygon.pulse{animation:hexpulse .9s ease-out 2}
+@keyframes hexpulse{0%{fill:var(--cream)}50%{fill:#FFE7A3}100%{fill:var(--gold)}}
+.top-right{display:flex;align-items:center;gap:10px}
+.thermo{height:10px;background:var(--cream-2);border-radius:10px;overflow:hidden;margin-top:8px}
+.thermo>i{display:block;height:100%;border-radius:10px;transition:width .55s cubic-bezier(.2,.8,.2,1), background-color .55s}
+.score{flex-wrap:wrap}
+.score .sc-l{flex:1;min-width:0}
+.meter>i{transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.spark{position:fixed;width:7px;height:7px;border-radius:2px;pointer-events:none;z-index:40;animation:spark .8s ease-out forwards}
+@keyframes spark{0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(160deg) scale(.4)}}
+.chk.on .box{animation:pop .25s ease-out}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.road{width:100%;height:auto;margin:6px 0 14px}
+.road .trail{stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 1.6s .2s ease-out forwards}
+.road .bdot{opacity:.25;transform-origin:center;animation:light .5s 1.7s ease-out forwards}
+.road .halo{opacity:0;animation:halo 1.2s 1.8s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes light{to{opacity:1}}
+@keyframes halo{0%{opacity:0;r:10}60%{opacity:.45}100%{opacity:.3;r:22}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:35}
+.toast.long{width:min(86vw,340px);text-align:center;border-radius:14px;line-height:1.35}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .road .trail{stroke-dashoffset:0} .road .bdot{opacity:1} .road .halo{opacity:.3}
+}
 @media print{
   body>*:not(#print){display:none!important}
   #print{display:block;color:#000;font-family:var(--sans);padding:0}
@@ -121,10 +155,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);bo
 <header class="top">
   <div class="top-row">
     <div style="min-width:0">
-      <div class="brand">Central de Negócios · Canela</div>
+      <div class="brand">Central de Negócios</div>
       <div class="where" id="where">Planejamento Estratégico</div>
     </div>
-    <button class="menu-btn" id="menuBtn" aria-label="Abrir etapas">Etapas</button>
+    <div class="top-right"><svg class="hive" id="hive" viewBox="-22 -22 44 44" aria-label="Progresso das seis colmeias"><polygon class="mid" points="6.20,0.00 3.10,5.37 -3.10,5.37 -6.20,0.00 -3.10,-5.37 3.10,-5.37"/><polygon data-h="fin" points="6.20,-10.74 3.10,-5.37 -3.10,-5.37 -6.20,-10.74 -3.10,-16.11 3.10,-16.11"/><polygon data-h="pes" points="15.50,-5.37 12.40,0.00 6.20,0.00 3.10,-5.37 6.20,-10.74 12.40,-10.74"/><polygon data-h="com" points="15.50,5.37 12.40,10.74 6.20,10.74 3.10,5.37 6.20,0.00 12.40,-0.00"/><polygon data-h="neg" points="6.20,10.74 3.10,16.11 -3.10,16.11 -6.20,10.74 -3.10,5.37 3.10,5.37"/><polygon data-h="ctb" points="-3.10,5.37 -6.20,10.74 -12.40,10.74 -15.50,5.37 -12.40,0.00 -6.20,-0.00"/><polygon data-h="cli" points="-3.10,-5.37 -6.20,-0.00 -12.40,-0.00 -15.50,-5.37 -12.40,-10.74 -6.20,-10.74"/></svg><button class="menu-btn" id="menuBtn" aria-label="Abrir etapas">Etapas</button></div>
   </div>
   <div class="bar"><i id="bar" style="width:0%"></i></div>
 </header>
@@ -146,6 +180,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);bo
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
 <section id="print"></section>
 
 <script>
@@ -160,7 +195,7 @@ const Q = [
 
 /* ---------- estado ---------- */
 function blank(){
-  const s = {step:0, nome:'', empresa:'', compromisso:false, primeira:'', mapa:{}, c:{}};
+  const s = {step:0, nome:'', empresa:'', compromisso:false, primeira:'', mapa:{}, c:{}, done:{}};
   COLMEIAS.forEach(c => {
     s.c[c.id] = {r:Array(10).fill(null), q:{}, star:null, auto:{},
       plano:{nov:[{},{},{}], dez:[{},{},{}]}};
@@ -170,6 +205,7 @@ function blank(){
 }
 let S;
 try { S = JSON.parse(localStorage.getItem(KEY)) || blank(); } catch(e){ S = blank(); }
+S.done = S.done || {};
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
 
 /* ---------- etapas ---------- */
@@ -196,7 +232,8 @@ function faixa(t, done=10){
 const marked = id => S.c[id].r.map((v,i) => ({v,i})).filter(o => o.v >= 1);
 const itemTxt = (id,i) => col(id).itens[i];
 const nn = i => String(i+1).padStart(2,'0');
-function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),1800); }
+function toastLong(h){ const t=$('#toast'); t.innerHTML=h; t.classList.add('show','long'); clearTimeout(t._h); t._h=setTimeout(()=>{t.classList.remove('show','long');},2800); }
+function toast(m){ const t=$('#toast'); t.classList.remove('long'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),1800); }
 
 /* ---------- telas ---------- */
 function vInicio(){
@@ -232,7 +269,7 @@ function vAnamnese(id){
   <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
   <h2>Isso acontece na sua empresa?</h2>
   ${c.foco ? `<div class="foco">${esc(c.foco)}</div>` : ''}
-  <div class="score"><div><small>Meu total</small><br><b>${t}</b> <small>de 20 · ${a}/10 respondidas</small></div><span class="pill ${f.cls}">${f.txt}</span></div>
+  <div class="score"><div class="sc-l"><small>Meu total</small><br><b>${t}</b> <small>de 20 · ${a}/10 respondidas</small><div class="thermo"><i data-w="${t*5}" style="width:${LAST.thermo ?? 0}%;background:${f.cor}"></i></div></div><span class="pill ${f.cls}">${f.txt}</span></div>
   ${c.itens.map((tx,i) => `
     <div class="card">
       <div class="item"><span class="num">${nn(i)}</span><span class="txt">${esc(tx)}</span></div>
@@ -314,8 +351,8 @@ function vPlacar(){
   <p class="lead">Calculado a partir das suas respostas. A maior nota mostra por onde começar.</p>
   ${r.map((o,k) => { const f = faixa(o.t, o.a); return `
     <div class="card ${k<2 && o.t>0 ? 'gold':''}">
-      <div class="rank"><span class="pos">${k+1}</span><span class="nm">${o.c.n} · ${esc(o.c.nome)}${k<2 && o.t>0 ? '<span class="tag">mais crítica</span>':''}</span><span class="pill ${f.cls}">${o.t}/20</span></div>
-      <div class="meter"><i style="width:${o.t*5}%;background:${f.cor}"></i></div>
+      <div class="rank"><span class="pos">${k+1}</span><span class="nm">${o.c.n} · ${esc(o.c.nome)}${k<2 && o.t>0 ? '<span class="tag">mais crítica</span>':''}</span><span class="pill ${f.cls}"><span data-count="${o.t}" data-delay="${(r.length-1-k)*220}">0</span>/20</span></div>
+      <div class="meter"><i data-w="${o.t*5}" style="width:0%;background:${f.cor};transition-delay:${(r.length-1-k)*220}ms"></i></div>
       ${o.a<10 ? `<small class="hint">${o.a}/10 respondidas</small>` : ''}
     </div>`; }).join('')}`;
 }
@@ -351,6 +388,15 @@ function vFinal(){
   <span class="eyebrow">Encerramento</span>
   <h1>O Ponto B começa na próxima segunda-feira.</h1>
   <p class="lead">09/11 · primeiro check-point · 15 minutos.</p>
+  <svg class="road" viewBox="0 0 340 90" aria-hidden="true">
+    <path d="M14 72 C110 74 140 22 220 34 C280 43 300 20 322 18" fill="none" stroke="#FBF1D6" stroke-width="12" stroke-linecap="round"/>
+    <path class="trail" d="M14 72 C110 74 140 22 220 34 C280 43 300 20 322 18" fill="none" stroke="#D9A93D" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="14" cy="72" r="6" fill="#0A2647"/>
+    <circle class="halo" cx="322" cy="18" r="10" fill="#D9A93D"/>
+    <circle class="bdot" cx="322" cy="18" r="9" fill="#0A2647" stroke="#D9A93D" stroke-width="3"/>
+    <text x="14" y="88" font-size="10" fill="#3E4A5C" font-family="DM Sans, Arial">Ponto A</text>
+    <text x="322" y="44" font-size="10" fill="#8A5E0F" font-family="DM Sans, Arial" text-anchor="end" font-weight="700">Ponto B</text>
+  </svg>
   <div class="card">
     <b>${esc(S.nome || 'Participante')}</b>${S.empresa ? ` · ${esc(S.empresa)}` : ''}<br>
     <small>Colmeias mais críticas: ${r.filter(o=>o.t>0).slice(0,2).map(o => `${o.c.n} · ${esc(o.c.nome)} (${o.t}/20)`).join(' e ')}</small>
@@ -361,6 +407,63 @@ function vFinal(){
     <button class="btn btn-o" data-a="reset">Apagar tudo e recomeçar</button>
   </div>
   <p class="foot">Suas respostas ficam salvas só neste celular.<br>Na consultoria individual, construímos o painel de indicadores de direção da sua empresa.<br>Central de Negócios · Cristiano Rodrigues e Patrícia Benedetto</p>`;
+}
+
+
+/* ---------- efeitos ---------- */
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LAST = {thermo:null};
+const FRASES = ['Diagnóstico honesto é metade do caminho.','Mais uma área mapeada.','Quem enxerga o problema já saiu do lugar.','Boa. O retrovisor está ficando claro.','Uma área a menos no escuro.','Mapa completo. Agora é escolher por onde começar.'];
+function buzz(ms=8){ try { if (!RM && navigator.vibrate) navigator.vibrate(ms); } catch(e){} }
+function sparkle(el){
+  if (RM || !el) return;
+  const r = el.getBoundingClientRect(), cx = r.left + 22, cy = r.top + r.height/2;
+  const cores = ['#D9A93D','#F2C96B','#8A5E0F','#0A2647'];
+  for (let k=0;k<10;k++){
+    const sp = document.createElement('span'); sp.className='spark';
+    const ang = Math.random()*Math.PI*2, dist = 26 + Math.random()*30;
+    sp.style.left = cx+'px'; sp.style.top = cy+'px'; sp.style.background = cores[k%cores.length];
+    sp.style.setProperty('--dx', Math.cos(ang)*dist+'px'); sp.style.setProperty('--dy', Math.sin(ang)*dist+'px');
+    document.body.appendChild(sp); setTimeout(()=>sp.remove(), 850);
+  }
+}
+function confetti(){
+  if (RM) return;
+  const cv = $('#fx'), ctx = cv.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio||1);
+  cv.width = innerWidth*dpr; cv.height = innerHeight*dpr; ctx.scale(dpr,dpr);
+  const cores = ['#D9A93D','#0A2647','#F2C96B','#8A5E0F','#FFFFFF'];
+  const P = Array.from({length:90}, () => ({x:innerWidth/2 + (Math.random()-.5)*60, y:innerHeight*0.38, vx:(Math.random()-.5)*11, vy:-6-Math.random()*8, w:5+Math.random()*5, h:8+Math.random()*6, r:Math.random()*6, vr:(Math.random()-.5)*.35, c:cores[Math.floor(Math.random()*cores.length)]}));
+  const t0 = performance.now();
+  (function frame(t){
+    const el = t - t0; ctx.clearRect(0,0,innerWidth,innerHeight);
+    P.forEach(p => { p.vy += .32; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.globalAlpha = Math.max(0, 1 - el/1700); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      ctx.strokeStyle = 'rgba(10,38,71,.15)'; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); });
+    if (el < 1750) requestAnimationFrame(frame); else ctx.clearRect(0,0,innerWidth,innerHeight);
+  })(t0);
+}
+function paintHive(pulseId){
+  const s = STEPS[S.step];
+  document.querySelectorAll('#hive polygon[data-h]').forEach(pg => {
+    const id = pg.dataset.h;
+    pg.classList.toggle('done', !!S.done[id]);
+    pg.classList.toggle('cur', s.c === id);
+    if (id === pulseId && !RM){ pg.classList.remove('pulse'); void pg.getBBox(); pg.classList.add('pulse'); }
+  });
+}
+function animateAfterRender(entering){
+  const th = document.querySelector('.thermo>i');
+  if (th){ requestAnimationFrame(() => requestAnimationFrame(() => { th.style.width = th.dataset.w + '%'; LAST.thermo = +th.dataset.w; })); }
+  if (entering && STEPS[S.step].t === 'placar'){
+    document.querySelectorAll('.meter>i[data-w]').forEach(m => requestAnimationFrame(() => requestAnimationFrame(() => { m.style.width = m.dataset.w + '%'; })));
+    document.querySelectorAll('[data-count]').forEach(n => {
+      const to = +n.dataset.count, delay = RM ? 0 : +n.dataset.delay, dur = RM ? 0 : 700;
+      setTimeout(() => { const t0 = performance.now(); (function tick(t){ const k = dur ? Math.min(1,(t-t0)/dur) : 1; n.textContent = Math.round(to*k); if (k<1) requestAnimationFrame(tick); })(t0); }, delay);
+    });
+  } else {
+    document.querySelectorAll('.meter>i[data-w]').forEach(m => { m.style.transitionDelay='0ms'; m.style.width = m.dataset.w + '%'; });
+    document.querySelectorAll('[data-count]').forEach(n => n.textContent = n.dataset.count);
+  }
 }
 
 /* ---------- render ---------- */
@@ -382,12 +485,17 @@ function render(){
   $('#next').textContent = S.step===0 ? 'Começar' : (S.step===STEPS.length-1 ? 'Concluído' : 'Avançar');
   $('#next').disabled = S.step===STEPS.length-1;
   $('#next').style.opacity = S.step===STEPS.length-1 ? .5 : 1;
+  paintHive();
 }
 function go(n){
-  S.step = Math.max(0, Math.min(STEPS.length-1, n)); save(); render();
+  const from = S.step;
+  S.step = Math.max(0, Math.min(STEPS.length-1, n)); save();
+  if (STEPS[S.step].t === 'anamnese') LAST.thermo = 0;
+  render(); animateAfterRender(true);
   window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  if (STEPS[S.step].t === 'final' && STEPS[from].t === 'mapa') setTimeout(confetti, 250);
 }
-function rerenderKeepScroll(){ const y = window.scrollY; render(); window.scrollTo(0, y); }
+function rerenderKeepScroll(){ const y = window.scrollY; render(); window.scrollTo(0, y); animateAfterRender(false); }
 
 /* ---------- eventos ---------- */
 $('#prev').onclick = () => go(S.step-1);
@@ -396,16 +504,24 @@ $('#next').onclick = () => {
   if (s.t==='anamnese' && answered(s.c) < 10){
     if (!confirm(`Faltam ${10-answered(s.c)} itens nesta anamnese. Avançar mesmo assim?`)) return;
   }
+  if (s.t==='plano' && !S.done[s.c]){
+    S.done[s.c] = true; save();
+    const n = Object.keys(S.done).length, c = col(s.c);
+    go(S.step+1); paintHive(s.c); buzz(20);
+    toastLong(`Colmeia ${c.n} concluída · ${n} de 6<br><small>${FRASES[Math.min(n,6)-1]}</small>`);
+    return;
+  }
   go(S.step+1);
 };
 $('#main').addEventListener('click', e => {
   const b = e.target.closest('button[data-a]'); if (!b) return;
   const s = STEPS[S.step], a = b.dataset.a;
+  if (['r','q','star','auto'].includes(a)) buzz();
   if (a==='r'){ const i=+b.dataset.i, v=+b.dataset.v; S.c[s.c].r[i] = S.c[s.c].r[i]===v ? null : v;
     if (S.c[s.c].r[i]===null || S.c[s.c].r[i]===0){ delete S.c[s.c].q[i]; delete S.c[s.c].auto[i]; if (S.c[s.c].star===i) S.c[s.c].star=null; }
     save(); rerenderKeepScroll(); }
   else if (a==='q'){ const i=+b.dataset.i; S.c[s.c].q[i] = S.c[s.c].q[i]===b.dataset.q ? undefined : b.dataset.q; save(); rerenderKeepScroll(); }
-  else if (a==='star'){ const i=+b.dataset.i; S.c[s.c].star = S.c[s.c].star===i ? null : i; save(); rerenderKeepScroll(); if (S.c[s.c].star===i) toast('★ marcada. Só pode haver uma por colmeia.'); }
+  else if (a==='star'){ const i=+b.dataset.i; S.c[s.c].star = S.c[s.c].star===i ? null : i; save(); rerenderKeepScroll(); if (S.c[s.c].star===i){ sparkle(document.querySelector(`button[data-a="star"][data-i="${i}"]`)); toast('★ marcada. Só pode haver uma por colmeia.'); } }
   else if (a==='auto'){ const i=+b.dataset.i; S.c[s.c].auto[i] = !S.c[s.c].auto[i]; save(); rerenderKeepScroll(); }
   else if (a==='sug'){ const v = sugestao(); if (!v){ toast('Escreva antes a ação da colmeia ' + ranking()[0].c.n + '.'); return; } S.primeira = v; save(); rerenderKeepScroll(); }
   else if (a==='pdf'){ buildPrint(); window.print(); }
@@ -467,7 +583,7 @@ function buildPrint(){
 }
 
 if (S.step >= STEPS.length) S.step = 0;
-render();
+render(); animateAfterRender(true);
 </script>
 </body>
 </html>

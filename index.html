@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A2647">
+<title>Planejamento Estratégico · Canela</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2647; --gold:#D9A93D; --gold-dk:#8A5E0F; --cream:#F6F2E9; --cream-2:#EFE8D8;
+  --tint:#FBF1D6; --gray:#3E4A5C; --line:#E4DCC8; --red:#B4432F; --white:#FFFFFF;
+  --ok:#2F6B4F;
+  --serif:'Playfair Display', Georgia, serif; --sans:'DM Sans', system-ui, -apple-system, Arial, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--cream);color:var(--navy);font-family:var(--sans);font-size:16px;line-height:1.4}
+body{min-height:100dvh;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:10;background:var(--navy);color:var(--cream);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:680px;margin:0 auto}
+.brand{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.where{font-size:14px;font-weight:500;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.menu-btn{background:none;border:1px solid rgba(246,242,233,.35);color:var(--cream);border-radius:10px;padding:6px 12px;font-size:14px;cursor:pointer}
+.bar{height:4px;background:rgba(246,242,233,.18);border-radius:4px;margin:10px auto 0;max-width:680px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--gold);transition:width .3s}
+main{flex:1;width:100%;max-width:680px;margin:0 auto;padding:20px 16px 120px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cream);background:var(--navy);padding:6px 12px;border-radius:6px}
+h1,h2{font-family:var(--serif);font-weight:700;line-height:1.12;color:var(--navy)}
+h1{font-size:32px;margin:14px 0 8px}
+h2{font-size:26px;margin:12px 0 6px}
+.lead{font-size:16px;color:var(--gray);margin-bottom:16px}
+.foco{font-size:14px;color:var(--gray);background:var(--white);border-left:4px solid var(--gold);padding:10px 12px;border-radius:8px;margin:10px 0 16px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card.gold{border:2px solid var(--gold);background:var(--tint)}
+label.f{display:block;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dk);margin:12px 0 6px}
+input[type=text],input[type=date],select,textarea{width:100%;background:var(--white);border:1.5px solid #CFC5AE;border-radius:10px;padding:12px;font-size:16px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(217,169,61,.35)}
+.item{display:flex;gap:10px;align-items:flex-start}
+.num{font-weight:700;color:var(--gold-dk);min-width:24px}
+.txt{flex:1;font-size:16px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.seg button,.chips button{border:1.5px solid #CFC5AE;background:var(--white);border-radius:10px;padding:10px 4px;font-size:14px;font-weight:500;cursor:pointer;min-height:44px}
+.seg button.on[data-v="0"]{background:var(--gray);border-color:var(--gray);color:var(--white)}
+.seg button.on[data-v="1"]{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:700}
+.seg button.on[data-v="2"]{background:var(--red);border-color:var(--red);color:var(--white);font-weight:700}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.chips button.on{background:var(--navy);border-color:var(--navy);color:var(--white);font-weight:700}
+.chips button.on[data-q="fazer"]{background:var(--red);border-color:var(--red)}
+.tog{display:flex;gap:8px;margin-top:8px}
+.tog button{flex:1;border:1.5px dashed #CFC5AE;background:transparent;border-radius:10px;padding:8px;font-size:14px;cursor:pointer;min-height:40px}
+.tog button.on{border-style:solid;border-color:var(--gold);background:var(--tint);font-weight:700}
+.score{position:sticky;top:76px;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--white);border:2px solid var(--navy);border-radius:12px;padding:10px 14px;margin-bottom:14px;box-shadow:0 6px 16px rgba(10,38,71,.08)}
+.score b{font-size:22px}
+.pill{font-size:13px;font-weight:700;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.p-s{background:#E6EEE9;color:var(--ok)} .p-a{background:var(--tint);color:var(--gold-dk)} .p-c{background:var(--red);color:var(--white)} .p-n{background:var(--cream-2);color:var(--gray)}
+.hint{font-size:14px;color:var(--gray);margin:6px 0 14px}
+.qcount{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.qcount div{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+.qcount b{font-size:18px;display:block}
+.month{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dk);background:var(--tint);border-left:4px solid var(--gold);padding:8px 12px;border-radius:6px;margin:18px 0 10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.empty{font-size:14px;color:var(--gray);background:var(--cream-2);border-radius:10px;padding:12px}
+.rank{display:flex;align-items:center;gap:12px}
+.rank .pos{font-family:var(--serif);font-size:26px;color:var(--gold);width:28px;text-align:center}
+.rank .nm{flex:1;font-weight:700}
+.meter{height:8px;background:var(--cream-2);border-radius:8px;margin-top:8px;overflow:hidden}
+.meter>i{display:block;height:100%}
+.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--red);border:1.5px solid var(--red);border-radius:999px;padding:2px 8px;margin-left:6px}
+.li{font-size:15px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.li:last-child{border-bottom:none}
+.btn{display:block;width:100%;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;min-height:50px}
+.btn-p{background:var(--navy);color:var(--cream)}
+.btn-g{background:var(--gold);color:var(--navy)}
+.btn-o{background:var(--white);color:var(--navy);border:1.5px solid var(--navy)}
+.stack>*+*{margin-top:10px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(246,242,233,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.nav-in{max-width:680px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.nav .btn{padding:13px}
+.decl{font-family:var(--serif);font-size:18px;line-height:1.55}
+.decl p+p{margin-top:10px}
+.decl i{color:var(--gold-dk)}
+.check{display:flex;gap:12px;align-items:center;font-weight:700;margin-top:14px;cursor:pointer}
+.check input{width:26px;height:26px;accent-color:var(--navy)}
+.drawer{position:fixed;inset:0;z-index:20;background:rgba(10,38,71,.5);display:none}
+.drawer.open{display:block}
+.drawer-in{position:absolute;right:0;top:0;bottom:0;width:min(86vw,360px);background:var(--cream);overflow:auto;padding:calc(16px + env(safe-area-inset-top)) 16px 24px}
+.drawer h3{font-family:var(--serif);font-size:22px;margin-bottom:10px}
+.dl{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:6px;font-size:14px;cursor:pointer}
+.dl.cur{border:2px solid var(--navy);font-weight:700}
+.dl small{color:var(--gray)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--navy);color:var(--cream);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:30}
+.toast.show{opacity:1}
+.foot{font-size:12px;color:var(--gray);text-align:center;margin-top:24px}
+#print{display:none}
+@media print{
+  body>*:not(#print){display:none!important}
+  #print{display:block;color:#000;font-family:var(--sans);padding:0}
+  #print h1{font-size:22pt;margin:0 0 4pt}
+  #print h2{font-size:14pt;margin:14pt 0 4pt;border-bottom:1pt solid #999;padding-bottom:2pt}
+  #print p,#print li,#print td{font-size:10.5pt}
+  #print table{width:100%;border-collapse:collapse;margin-top:4pt}
+  #print td,#print th{border:0.5pt solid #999;padding:4pt;text-align:left;font-size:10pt;vertical-align:top}
+  #print .pb{page-break-before:always}
+  @page{size:A4;margin:14mm}
+}
+@media (min-width:700px){h1{font-size:38px} main{padding-top:28px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div style="min-width:0">
+      <div class="brand">Central de Negócios · Canela</div>
+      <div class="where" id="where">Planejamento Estratégico</div>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir etapas">Etapas</button>
+  </div>
+  <div class="bar"><i id="bar" style="width:0%"></i></div>
+</header>
+
+<main id="main" aria-live="polite"></main>
+
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <button class="btn btn-o" id="prev">Voltar</button>
+    <button class="btn btn-p" id="next">Avançar</button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer" role="dialog" aria-label="Etapas">
+  <div class="drawer-in">
+    <h3>Etapas</h3>
+    <div id="dlist"></div>
+    <button class="btn btn-o" id="closeDrawer" style="margin-top:12px">Fechar</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<section id="print"></section>
+
+<script>
+const COLMEIAS = [{"id": "fin", "n": "01", "nome": "Gestão Financeira", "foco": "", "itens": ["Pago contas da empresa com dinheiro pessoal, ou o contrário.", "Não sei dizer, com números, se a empresa teve lucro no mês passado.", "Já perdi um vencimento ou paguei juros por esquecer uma conta.", "Não sei exatamente quanto tenho a receber, nem de quem.", "O saldo do banco não bate com o que está na minha planilha ou sistema.", "Não consigo prever quanto vou faturar no mês que vem.", "Falta dinheiro para pagar fornecedor ou folha, mesmo vendendo bem.", "Defino o preço olhando o concorrente, e não o meu custo.", "Tenho clientes atrasados e nenhuma rotina para cobrar.", "Uso cheque especial, cartão ou empréstimo para cobrir o dia a dia."]}, {"id": "pes", "n": "02", "nome": "Gestão de Pessoas", "foco": "Sem funcionários? Pense nos seus parceiros, freelancers e fornecedores.", "itens": ["Não está escrito o que cada pessoa faz e pelo que responde.", "Só eu sei fazer as tarefas mais importantes da empresa.", "A equipe me chama para decidir coisas que poderia resolver sozinha.", "Quem entra aprende olhando os outros, sem treinamento.", "Demoro muito para encontrar alguém bom quando preciso contratar.", "Contrato no aperto, por indicação, sem um perfil definido.", "Bons funcionários saem e eu nem sempre sei por quê.", "Não converso com cada um sobre o desempenho dele.", "Falhas de comunicação ou conflitos atrapalham o trabalho.", "Trabalho mais horas do que gostaria, porque não tenho em quem confiar."]}, {"id": "com", "n": "03", "nome": "Gestão Comercial e Vendas", "foco": "Foco: conquistar novos clientes. Manter os clientes é assunto da Colmeia 06.", "itens": ["Não sei descrever, com clareza, quem é o meu cliente ideal.", "Quase todo cliente chega por indicação; não tenho outro canal.", "Invisto em divulgação sem saber se ela traz cliente.", "Demoro mais de uma hora para responder quem me procura.", "Não registro os contatos que chegam: nome, origem e o que pediu.", "Envio orçamento e não faço o acompanhamento depois.", "Não sei quantos orçamentos viram venda.", "Só eu consigo vender; quando não estou, ninguém fecha.", "Dou desconto para fechar, porque não sei mostrar o valor.", "Não tenho uma meta de vendas mensal definida."]}, {"id": "neg", "n": "04", "nome": "Gestão de Negócio", "foco": "Foco: estratégia, processos e indicadores do seu negócio.", "itens": ["Não sei dizer em uma frase por que o cliente deve escolher a minha empresa.", "Não tenho objetivos escritos para os próximos 12 meses.", "Tomo as decisões importantes pelo instinto, sem olhar números.", "Não acompanho nenhum indicador do negócio toda semana ou todo mês.", "Os processos principais não estão escritos; cada um faz de um jeito.", "O mesmo erro ou retrabalho se repete na operação.", "Uso planilhas e sistemas que não conversam entre si.", "Não sei qual produto ou serviço me dá mais lucro.", "Não acompanho o que os concorrentes estão fazendo.", "Passo o dia apagando incêndio e não sobra tempo para pensar no negócio."]}, {"id": "ctb", "n": "05", "nome": "Gestão Contábil e Tributária", "foco": "Foco: o imposto que você paga e a sua relação com o contador.", "itens": ["Só falo com o meu contador quando chega a guia ou aparece um problema.", "Não sei em qual regime tributário a empresa está, nem por que está nele.", "Nunca simulei com o contador se outro regime pagaria menos imposto.", "Não sei quanto pago de imposto por mês, em reais e em % do faturamento.", "Formo o preço de venda sem colocar o imposto na conta.", "Entrego notas e documentos ao contador com atraso ou incompletos.", "Não acompanho se o faturamento está perto do limite do MEI ou do Simples.", "A empresa tem imposto em atraso ou dificuldade para tirar certidão negativa.", "Recebo o balanço e a DRE do contador, mas não leio ou não entendo.", "Não sei o que a reforma tributária muda para a minha empresa em 2027."]}, {"id": "cli", "n": "06", "nome": "Gestão de Clientes", "foco": "Foco: manter os clientes que você já tem. Conquistar novos é assunto da Colmeia 03.", "itens": ["Não sei quantos clientes compraram de mim mais de uma vez no último ano.", "Depois que entrego, não volto a falar com o cliente.", "Não tenho uma lista de clientes com contato e histórico de compras.", "Não pergunto ao cliente se ele ficou satisfeito.", "Não tenho um jeito definido de responder e resolver reclamações.", "Quando um cliente some, não procuro saber por quê.", "Não tenho nada que valorize ou premie quem compra sempre.", "Não peço indicação nem avaliação aos clientes satisfeitos.", "O atendimento muda conforme quem atende; não há um padrão.", "Não sei quais são os 20% de clientes que trazem a maior parte do faturamento."]}];
+const KEY = 'pe-canela-2026-v1';
+const Q = [
+  {id:'fazer', nome:'Fazer agora', d:'Você mesmo, esta semana'},
+  {id:'agendar', nome:'Agendar', d:'Com data marcada na agenda'},
+  {id:'delegar', nome:'Delegar', d:'Equipe, contador ou parceiro'},
+  {id:'esperar', nome:'Pode esperar', d:'Fica para o próximo ciclo'}
+];
+
+/* ---------- estado ---------- */
+function blank(){
+  const s = {step:0, nome:'', empresa:'', compromisso:false, primeira:'', mapa:{}, c:{}};
+  COLMEIAS.forEach(c => {
+    s.c[c.id] = {r:Array(10).fill(null), q:{}, star:null, auto:{},
+      plano:{nov:[{},{},{}], dez:[{},{},{}]}};
+    s.mapa[c.id] = {acao:'', ate:''};
+  });
+  return s;
+}
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)) || blank(); } catch(e){ S = blank(); }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+
+/* ---------- etapas ---------- */
+const STEPS = [{t:'inicio', label:'Início'}, {t:'declaracao', label:'Declaração'}];
+COLMEIAS.forEach(c => {
+  STEPS.push({t:'anamnese', c:c.id, label:`${c.n} · Anamnese`});
+  STEPS.push({t:'matriz', c:c.id, label:`${c.n} · Por onde começar?`});
+  STEPS.push({t:'plano', c:c.id, label:`${c.n} · Plan Fast Result`});
+});
+STEPS.push({t:'placar', label:'Placar'}, {t:'mapa', label:'Meu mapa · Fazer agora'}, {t:'final', label:'Meu plano'});
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const col = id => COLMEIAS.find(c => c.id === id);
+const total = id => S.c[id].r.reduce((a,v) => a + (v ?? 0), 0);
+const answered = id => S.c[id].r.filter(v => v !== null).length;
+function faixa(t, done=10){
+  if (done === 0) return {cls:'p-n', txt:'não respondida', cor:'#CFC5AE'};
+  if (t <= 5) return {cls:'p-s', txt:'saudável', cor:'#2F6B4F'};
+  if (t <= 12) return {cls:'p-a', txt:'atenção', cor:'#D9A93D'};
+  return {cls:'p-c', txt:'crítico', cor:'#B4432F'};
+}
+const marked = id => S.c[id].r.map((v,i) => ({v,i})).filter(o => o.v >= 1);
+const itemTxt = (id,i) => col(id).itens[i];
+const nn = i => String(i+1).padStart(2,'0');
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),1800); }
+
+/* ---------- telas ---------- */
+function vInicio(){
+  return `
+  <span class="eyebrow">Workshop prático</span>
+  <h1>Planejamento Estratégico</h1>
+  <p class="lead">Canela · 05/11/2026 · Sicredi Canela<br>Com Cristiano Rodrigues e Patrícia Benedetto</p>
+  <div class="card">
+    <p class="hint" style="margin-top:0">Hoje você vai fazer um check-up da sua empresa em 6 áreas e sair com um plano de ação para novembro e dezembro. Tudo fica salvo neste celular.</p>
+    <label class="f" for="nome">Seu nome</label>
+    <input type="text" id="nome" data-k="nome" autocomplete="name" value="${esc(S.nome)}" placeholder="Como você se chama?">
+    <label class="f" for="empresa">Sua empresa</label>
+    <input type="text" id="empresa" data-k="empresa" autocomplete="organization" value="${esc(S.empresa)}" placeholder="Nome da empresa">
+  </div>`;
+}
+function vDeclaracao(){
+  const n = S.nome ? esc(S.nome) : '______';
+  return `
+  <span class="eyebrow">Compromisso pessoal</span>
+  <h1>Declaração</h1>
+  <div class="card gold decl">
+    <p>Eu, <b>${n}</b>, declaro que hoje decido parar de esperar o momento certo.</p>
+    <p>Reconheço que a empresa que tenho hoje é fruto das escolhas que fiz até aqui, e que a empresa que quero ter será fruto das escolhas que farei a partir de agora.</p>
+    <p>Assumo, diante de mim e de quem confia em mim, o compromisso com o sucesso da minha vida e da minha empresa. Vou olhar para o meu negócio com honestidade, mesmo quando a verdade incomodar.</p>
+    <p><i>Daqui a um ano, quero olhar para trás e dizer: foi neste dia que tudo mudou.</i></p>
+  </div>
+  <label class="check"><input type="checkbox" id="comp" ${S.compromisso?'checked':''}> Eu me comprometo</label>
+  <p class="hint">Canela, 05 de novembro de 2026</p>`;
+}
+function vAnamnese(id){
+  const c = col(id), st = S.c[id], t = total(id), a = answered(id), f = faixa(t, a);
+  return `
+  <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
+  <h2>Isso acontece na sua empresa?</h2>
+  ${c.foco ? `<div class="foco">${esc(c.foco)}</div>` : ''}
+  <div class="score"><div><small>Meu total</small><br><b>${t}</b> <small>de 20 · ${a}/10 respondidas</small></div><span class="pill ${f.cls}">${f.txt}</span></div>
+  ${c.itens.map((tx,i) => `
+    <div class="card">
+      <div class="item"><span class="num">${nn(i)}</span><span class="txt">${esc(tx)}</span></div>
+      <div class="seg" role="group" aria-label="Frequência do item ${nn(i)}">
+        ${['Nunca','Às vezes','Sempre'].map((l,v) => `<button data-a="r" data-i="${i}" data-v="${v}" class="${st.r[i]===v?'on':''}" aria-pressed="${st.r[i]===v}">${l}</button>`).join('')}
+      </div>
+    </div>`).join('')}
+  <p class="hint">Pontuação: Nunca = 0 · Às vezes = 1 · Sempre = 2. De 0 a 5 saudável, de 6 a 12 atenção, de 13 a 20 crítico.</p>`;
+}
+function vMatriz(id){
+  const c = col(id), st = S.c[id], m = marked(id);
+  const cnt = q => m.filter(o => st.q[o.i] === q).length;
+  if (!m.length) return `
+    <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
+    <h2>Por onde começar?</h2>
+    <div class="empty">Nenhum item marcado como “às vezes” ou “sempre” nesta colmeia. Boa notícia: siga para a próxima etapa.</div>`;
+  return `
+  <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
+  <h2>Por onde começar?</h2>
+  <p class="hint">Para cada item que você marcou, escolha o quadrante. Depois marque <b>uma única ★</b>: o item que, resolvido primeiro, traz o maior resultado nos próximos 30 dias. Marque <b>A</b> no que pode ser automatizado.</p>
+  <div class="qcount">${Q.map(q => `<div>${q.nome}<b>${cnt(q.id)}</b></div>`).join('')}</div>
+  ${m.map(o => `
+    <div class="card ${st.star===o.i?'gold':''}">
+      <div class="item"><span class="num">${nn(o.i)}</span><span class="txt">${esc(itemTxt(id,o.i))} <span class="pill ${o.v===2?'p-c':'p-a'}" style="font-size:11px">${o.v===2?'sempre':'às vezes'}</span></span></div>
+      <div class="chips">${Q.map(q => `<button data-a="q" data-i="${o.i}" data-q="${q.id}" class="${st.q[o.i]===q.id?'on':''}" aria-pressed="${st.q[o.i]===q.id}">${q.nome}</button>`).join('')}</div>
+      <div class="tog">
+        <button data-a="star" data-i="${o.i}" class="${st.star===o.i?'on':''}" aria-pressed="${st.star===o.i}">★ Maior resultado</button>
+        <button data-a="auto" data-i="${o.i}" class="${st.auto[o.i]?'on':''}" aria-pressed="${!!st.auto[o.i]}">A · Automatizar</button>
+      </div>
+    </div>`).join('')}`;
+}
+function optsFor(id, sel){
+  const st = S.c[id];
+  const pri = marked(id).filter(o => st.q[o.i]==='fazer' || st.q[o.i]==='agendar')
+    .sort((a,b) => (st.star===b.i) - (st.star===a.i) || (st.q[a.i]==='fazer' ? -1 : 1));
+  const all = marked(id).filter(o => !pri.includes(o));
+  const op = o => `<option value="${o.i}" ${String(sel)===String(o.i)?'selected':''}>${st.star===o.i?'★ ':''}${nn(o.i)} · ${esc(itemTxt(id,o.i))}</option>`;
+  return `<option value="">Escolha a prioridade…</option>
+    ${pri.length ? `<optgroup label="Fazer agora e Agendar">${pri.map(op).join('')}</optgroup>` : ''}
+    ${all.length ? `<optgroup label="Outros itens marcados">${all.map(op).join('')}</optgroup>` : ''}
+    <option value="outra" ${sel==='outra'?'selected':''}>Outra (escrever)</option>`;
+}
+function vPlano(id){
+  const c = col(id), st = S.c[id];
+  const row = (mes, k) => {
+    const r = st.plano[mes][k];
+    return `
+    <div class="card">
+      <label class="f" style="margin-top:0">Prioridade ${k+1}${mes==='nov'&&k===0?' · comece pela ★':''}</label>
+      <select data-a="p" data-m="${mes}" data-k="${k}" data-f="item">${optsFor(id, r.item ?? '')}</select>
+      ${r.item==='outra' ? `<input type="text" style="margin-top:8px" data-a="p" data-m="${mes}" data-k="${k}" data-f="livre" value="${esc(r.livre)}" placeholder="Escreva a prioridade">` : ''}
+      <label class="f">Responsável</label>
+      <input type="text" data-a="p" data-m="${mes}" data-k="${k}" data-f="resp" value="${esc(r.resp)}" placeholder="Quem faz?">
+      <label class="f">Meta ou entrega</label>
+      <input type="text" data-a="p" data-m="${mes}" data-k="${k}" data-f="meta" value="${esc(r.meta)}" placeholder="O que você faz, e quantas vezes?">
+      <label class="f">Prazo</label>
+      <input type="date" data-a="p" data-m="${mes}" data-k="${k}" data-f="prazo" value="${esc(r.prazo)}" min="2026-11-05" max="2026-12-31">
+    </div>`;
+  };
+  return `
+  <span class="eyebrow">Colmeia ${c.n} · ${esc(c.nome)}</span>
+  <h2>Plan Fast Result</h2>
+  <p class="hint">No máximo 3 prioridades por mês. Na meta, escreva o que <b>você faz</b> (ex.: “responder todo contato em até 15 min”), não só o resultado que quer.</p>
+  <div class="month">Novembro 2026</div>${[0,1,2].map(k => row('nov',k)).join('')}
+  <div class="month">Dezembro 2026</div>${[0,1,2].map(k => row('dez',k)).join('')}
+  <div class="card"><b>Check-point semanal:</b> toda segunda-feira, 15 minutos.<br><small>09/11 · 16/11 · 23/11 · 30/11 · 07/12 · 14/12 · 21/12 · 28/12</small></div>`;
+}
+function sugestao(){
+  const top = ranking()[0]; if (!top || top.t===0) return '';
+  const id = top.c.id, st = S.c[id];
+  if (S.mapa[id].acao) return S.mapa[id].acao;
+  const p = st.plano.nov[0]; if (p && p.meta) return p.meta;
+  return '';
+}
+function ranking(){
+  return COLMEIAS.map(c => ({c, t:total(c.id), a:answered(c.id)})).sort((x,y) => y.t - x.t);
+}
+function vPlacar(){
+  const r = ranking();
+  return `
+  <span class="eyebrow">Placar · As seis colmeias</span>
+  <h1>Onde dói mais?</h1>
+  <p class="lead">Calculado a partir das suas respostas. A maior nota mostra por onde começar.</p>
+  ${r.map((o,k) => { const f = faixa(o.t, o.a); return `
+    <div class="card ${k<2 && o.t>0 ? 'gold':''}">
+      <div class="rank"><span class="pos">${k+1}</span><span class="nm">${o.c.n} · ${esc(o.c.nome)}${k<2 && o.t>0 ? '<span class="tag">mais crítica</span>':''}</span><span class="pill ${f.cls}">${o.t}/20</span></div>
+      <div class="meter"><i style="width:${o.t*5}%;background:${f.cor}"></i></div>
+      ${o.a<10 ? `<small class="hint">${o.a}/10 respondidas</small>` : ''}
+    </div>`; }).join('')}`;
+}
+function vMapa(){
+  const r = ranking();
+  const sug = sugestao();
+  return `
+  <span class="eyebrow">Meu mapa · Ponto B</span>
+  <h1>Fazer agora.</h1>
+  <p class="lead">De cada colmeia, só o que ficou no quadrante <b>Fazer agora</b>. É isso que sai daqui com você.</p>
+  ${COLMEIAS.map(c => {
+    const st = S.c[c.id], fz = marked(c.id).filter(o => st.q[o.i]==='fazer');
+    const mp = S.mapa[c.id];
+    return `
+    <div class="card">
+      <div class="item"><span class="num">${c.n}</span><span class="txt"><b>${esc(c.nome)}</b></span></div>
+      ${fz.length ? `<div style="margin-top:8px">${fz.map(o => `<div class="li">${st.star===o.i?'★ ':''}${nn(o.i)} · ${esc(itemTxt(c.id,o.i))}</div>`).join('')}</div>` : `<div class="empty" style="margin-top:8px">Nada em “Fazer agora” nesta colmeia.</div>`}
+      ${fz.length ? `
+      <label class="f">O que vou fazer</label>
+      <input type="text" data-a="mapa" data-c="${c.id}" data-f="acao" value="${esc(mp.acao)}" placeholder="A ação, em uma frase">
+      <label class="f">Até quando</label>
+      <input type="date" data-a="mapa" data-c="${c.id}" data-f="ate" value="${esc(mp.ate)}" min="2026-11-05" max="2026-12-31">` : ''}
+    </div>`; }).join('')}
+  <div class="card gold">
+    <label class="f" style="margin-top:0" for="primeira">★ A primeira ação, já amanhã</label>
+    <textarea id="primeira" data-k="primeira" rows="2" placeholder="Uma única ação para fazer amanhã">${esc(S.primeira)}</textarea>
+    ${ranking()[0].t>0 ? `<button class="btn btn-o" style="margin-top:8px" data-a="sug">Usar a ação da colmeia mais crítica (${ranking()[0].c.n})</button>` : ''}
+  </div>`;
+}
+function vFinal(){
+  const r = ranking();
+  return `
+  <span class="eyebrow">Encerramento</span>
+  <h1>O Ponto B começa na próxima segunda-feira.</h1>
+  <p class="lead">09/11 · primeiro check-point · 15 minutos.</p>
+  <div class="card">
+    <b>${esc(S.nome || 'Participante')}</b>${S.empresa ? ` · ${esc(S.empresa)}` : ''}<br>
+    <small>Colmeias mais críticas: ${r.filter(o=>o.t>0).slice(0,2).map(o => `${o.c.n} · ${esc(o.c.nome)} (${o.t}/20)`).join(' e ')}</small>
+    ${S.primeira ? `<p style="margin-top:10px"><b>★ Primeira ação:</b> ${esc(S.primeira)}</p>` : ''}
+  </div>
+  <div class="stack">
+    <button class="btn btn-g" data-a="pdf">Baixar meu plano em PDF</button>
+    <button class="btn btn-p" data-a="wa">Enviar meu plano no meu WhatsApp</button>
+    <button class="btn btn-o" data-a="reset">Apagar tudo e recomeçar</button>
+  </div>
+  <p class="foot">Suas respostas ficam salvas só neste celular.<br>Na consultoria individual, construímos o painel de indicadores de direção da sua empresa.<br>Central de Negócios · Cristiano Rodrigues e Patrícia Benedetto</p>`;
+}
+
+/* ---------- render ---------- */
+function render(){
+  const s = STEPS[S.step], m = $('#main');
+  let h = '';
+  if (s.t==='inicio') h = vInicio();
+  else if (s.t==='declaracao') h = vDeclaracao();
+  else if (s.t==='anamnese') h = vAnamnese(s.c);
+  else if (s.t==='matriz') h = vMatriz(s.c);
+  else if (s.t==='plano') h = vPlano(s.c);
+  else if (s.t==='placar') h = vPlacar();
+  else if (s.t==='mapa') h = vMapa();
+  else h = vFinal();
+  m.innerHTML = h;
+  $('#where').textContent = s.c ? `Colmeia ${s.label}` : s.label;
+  $('#bar').style.width = `${Math.round(S.step/(STEPS.length-1)*100)}%`;
+  $('#prev').style.visibility = S.step===0 ? 'hidden' : 'visible';
+  $('#next').textContent = S.step===0 ? 'Começar' : (S.step===STEPS.length-1 ? 'Concluído' : 'Avançar');
+  $('#next').disabled = S.step===STEPS.length-1;
+  $('#next').style.opacity = S.step===STEPS.length-1 ? .5 : 1;
+}
+function go(n){
+  S.step = Math.max(0, Math.min(STEPS.length-1, n)); save(); render();
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+}
+function rerenderKeepScroll(){ const y = window.scrollY; render(); window.scrollTo(0, y); }
+
+/* ---------- eventos ---------- */
+$('#prev').onclick = () => go(S.step-1);
+$('#next').onclick = () => {
+  const s = STEPS[S.step];
+  if (s.t==='anamnese' && answered(s.c) < 10){
+    if (!confirm(`Faltam ${10-answered(s.c)} itens nesta anamnese. Avançar mesmo assim?`)) return;
+  }
+  go(S.step+1);
+};
+$('#main').addEventListener('click', e => {
+  const b = e.target.closest('button[data-a]'); if (!b) return;
+  const s = STEPS[S.step], a = b.dataset.a;
+  if (a==='r'){ const i=+b.dataset.i, v=+b.dataset.v; S.c[s.c].r[i] = S.c[s.c].r[i]===v ? null : v;
+    if (S.c[s.c].r[i]===null || S.c[s.c].r[i]===0){ delete S.c[s.c].q[i]; delete S.c[s.c].auto[i]; if (S.c[s.c].star===i) S.c[s.c].star=null; }
+    save(); rerenderKeepScroll(); }
+  else if (a==='q'){ const i=+b.dataset.i; S.c[s.c].q[i] = S.c[s.c].q[i]===b.dataset.q ? undefined : b.dataset.q; save(); rerenderKeepScroll(); }
+  else if (a==='star'){ const i=+b.dataset.i; S.c[s.c].star = S.c[s.c].star===i ? null : i; save(); rerenderKeepScroll(); if (S.c[s.c].star===i) toast('★ marcada. Só pode haver uma por colmeia.'); }
+  else if (a==='auto'){ const i=+b.dataset.i; S.c[s.c].auto[i] = !S.c[s.c].auto[i]; save(); rerenderKeepScroll(); }
+  else if (a==='sug'){ const v = sugestao(); if (!v){ toast('Escreva antes a ação da colmeia ' + ranking()[0].c.n + '.'); return; } S.primeira = v; save(); rerenderKeepScroll(); }
+  else if (a==='pdf'){ buildPrint(); window.print(); }
+  else if (a==='wa'){ window.open('https://wa.me/?text=' + encodeURIComponent(planText()), '_blank'); }
+  else if (a==='reset'){ if (confirm('Apagar todas as respostas deste celular?')){ S = blank(); save(); render(); toast('Tudo apagado.'); } }
+});
+$('#main').addEventListener('input', e => {
+  const el = e.target, s = STEPS[S.step];
+  if (el.dataset.k){ S[el.dataset.k] = el.value; save(); return; }
+  if (el.id==='comp'){ S.compromisso = el.checked; save(); return; }
+  if (el.dataset.a==='p'){
+    const r = S.c[s.c].plano[el.dataset.m][+el.dataset.k]; r[el.dataset.f] = el.value; save();
+    if (el.dataset.f==='item') rerenderKeepScroll();
+  }
+  if (el.dataset.a==='mapa'){ S.mapa[el.dataset.c][el.dataset.f] = el.value; save(); }
+});
+$('#main').addEventListener('change', e => { if (e.target.id==='comp'){ S.compromisso = e.target.checked; save(); } });
+$('#menuBtn').onclick = () => {
+  $('#dlist').innerHTML = STEPS.map((s,k) => {
+    let extra = '';
+    if (s.t==='anamnese'){ const t=total(s.c), a=answered(s.c); extra = a ? `${t}/20` : ''; }
+    return `<button class="dl ${k===S.step?'cur':''}" data-go="${k}"><span>${esc(s.c ? 'Colmeia '+s.label : s.label)}</span><small>${extra}</small></button>`;
+  }).join('');
+  $('#drawer').classList.add('open');
+};
+$('#drawer').addEventListener('click', e => {
+  const b = e.target.closest('[data-go]');
+  if (b){ $('#drawer').classList.remove('open'); go(+b.dataset.go); }
+  else if (e.target.id==='drawer' || e.target.id==='closeDrawer') $('#drawer').classList.remove('open');
+});
+
+/* ---------- saída: texto e PDF ---------- */
+const fmt = d => d ? d.split('-').reverse().slice(0,2).join('/') : '';
+function prioTxt(id, r){ return r.item==='outra' ? (r.livre||'') : (r.item!==undefined && r.item!=='' ? itemTxt(id, +r.item) : ''); }
+function planText(){
+  const r = ranking();
+  let t = `*Meu plano · Planejamento Estratégico (Canela, 05/11/2026)*\n${S.nome||''}${S.empresa?' · '+S.empresa:''}\n\n*Placar*\n`;
+  r.forEach(o => t += `${o.c.n} ${o.c.nome}: ${o.t}/20 (${faixa(o.t,o.a).txt})\n`);
+  t += `\n*Fazer agora*\n`;
+  COLMEIAS.forEach(c => { const mp = S.mapa[c.id]; if (mp.acao) t += `• ${c.nome}: ${mp.acao}${mp.ate?' (até '+fmt(mp.ate)+')':''}\n`; });
+  if (S.primeira) t += `\n★ *Primeira ação, amanhã:* ${S.primeira}\n`;
+  t += `\nCheck-point: toda segunda-feira, 15 min. Primeiro: 09/11.`;
+  return t;
+}
+function buildPrint(){
+  const r = ranking();
+  let h = `<h1>Meu plano · Planejamento Estratégico</h1><p>${esc(S.nome)}${S.empresa?' · '+esc(S.empresa):''} · Canela, 05/11/2026 · Central de Negócios</p>`;
+  h += `<h2>Placar</h2><table><tr><th>Colmeia</th><th>Total</th><th>Situação</th></tr>${r.map(o => `<tr><td>${o.c.n} · ${esc(o.c.nome)}</td><td>${o.t}/20</td><td>${faixa(o.t,o.a).txt}</td></tr>`).join('')}</table>`;
+  h += `<h2>Meu mapa · Fazer agora</h2><table><tr><th>Colmeia</th><th>Itens</th><th>O que vou fazer</th><th>Até</th></tr>${COLMEIAS.map(c => { const st=S.c[c.id], fz=marked(c.id).filter(o=>st.q[o.i]==='fazer'), mp=S.mapa[c.id]; return `<tr><td>${c.n} · ${esc(c.nome)}</td><td>${fz.map(o=>(st.star===o.i?'★ ':'')+nn(o.i)).join(', ')||'-'}</td><td>${esc(mp.acao)}</td><td>${fmt(mp.ate)}</td></tr>`; }).join('')}</table>`;
+  if (S.primeira) h += `<p style="margin-top:8pt"><b>★ A primeira ação, já amanhã:</b> ${esc(S.primeira)}</p>`;
+  h += `<h2 class="pb">Plan Fast Result · novembro e dezembro de 2026</h2>`;
+  COLMEIAS.forEach(c => {
+    const st = S.c[c.id]; const rows = [...st.plano.nov.map(x=>['Nov',x]), ...st.plano.dez.map(x=>['Dez',x])].filter(([,x]) => prioTxt(c.id,x) || x.meta);
+    if (!rows.length) return;
+    h += `<p style="margin-top:8pt"><b>${c.n} · ${esc(c.nome)}</b></p><table><tr><th>Mês</th><th>Prioridade</th><th>Responsável</th><th>Meta ou entrega</th><th>Prazo</th></tr>${rows.map(([m,x]) => `<tr><td>${m}</td><td>${esc(prioTxt(c.id,x))}</td><td>${esc(x.resp)}</td><td>${esc(x.meta)}</td><td>${fmt(x.prazo)}</td></tr>`).join('')}</table>`;
+  });
+  h += `<p style="margin-top:10pt">Check-point semanal: toda segunda-feira, 15 minutos · 09/11 · 16/11 · 23/11 · 30/11 · 07/12 · 14/12 · 21/12 · 28/12</p>`;
+  $('#print').innerHTML = h;
+}
+
+if (S.step >= STEPS.length) S.step = 0;
+render();
+</script>
+</body>
+</html>

@@ -131,10 +131,9 @@ button:active{transform:scale(.97)}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes light{to{opacity:1}}
 @keyframes halo{0%{opacity:0;r:10}60%{opacity:.45}100%{opacity:.3;r:22}}
-#fx{position:fixed;inset:0;pointer-events:none;z-index:35}
+#fx{position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:35}
 .toast.long{width:min(86vw,340px);text-align:center;border-radius:14px;line-height:1.35}
-html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition:none!important}
-html.rm .road .trail{stroke-dashoffset:0} html.rm .road .bdot{opacity:1} html.rm .road .halo{opacity:.3}
+html.rm *:not(.road *),html.rm *::before,html.rm *::after{animation:none!important;transition:none!important}
 @media print{
   body>*:not(#print){display:none!important}
   #print{display:block;color:#000;font-family:var(--sans);padding:0}
@@ -428,9 +427,10 @@ function sparkle(el){
   }
 }
 function confetti(){
-  if (RM) return;
   const cv = $('#fx'), ctx = cv.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio||1);
-  cv.width = innerWidth*dpr; cv.height = innerHeight*dpr; ctx.scale(dpr,dpr);
+  cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+  cv.width = Math.round(innerWidth*dpr); cv.height = Math.round(innerHeight*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
   const cores = ['#D9A93D','#0A2647','#F2C96B','#8A5E0F','#FFFFFF'];
   const P = Array.from({length:90}, () => ({x:innerWidth/2 + (Math.random()-.5)*60, y:innerHeight*0.38, vx:(Math.random()-.5)*11, vy:-6-Math.random()*8, w:5+Math.random()*5, h:8+Math.random()*6, r:Math.random()*6, vr:(Math.random()-.5)*.35, c:cores[Math.floor(Math.random()*cores.length)]}));
   const t0 = performance.now();

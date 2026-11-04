@@ -133,10 +133,8 @@ button:active{transform:scale(.97)}
 @keyframes halo{0%{opacity:0;r:10}60%{opacity:.45}100%{opacity:.3;r:22}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:35}
 .toast.long{width:min(86vw,340px);text-align:center;border-radius:14px;line-height:1.35}
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  .road .trail{stroke-dashoffset:0} .road .bdot{opacity:1} .road .halo{opacity:.3}
-}
+html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition:none!important}
+html.rm .road .trail{stroke-dashoffset:0} html.rm .road .bdot{opacity:1} html.rm .road .halo{opacity:.3}
 @media print{
   body>*:not(#print){display:none!important}
   #print{display:block;color:#000;font-family:var(--sans);padding:0}
@@ -411,7 +409,9 @@ function vFinal(){
 
 
 /* ---------- efeitos ---------- */
-const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FORCE_FX = /[?&]fx=1/.test(location.search);
+const RM = !FORCE_FX && !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+if (RM) document.documentElement.classList.add('rm');
 const LAST = {thermo:null};
 const FRASES = ['Diagnóstico honesto é metade do caminho.','Mais uma área mapeada.','Quem enxerga o problema já saiu do lugar.','Boa. O retrovisor está ficando claro.','Uma área a menos no escuro.','Mapa completo. Agora é escolher por onde começar.'];
 function buzz(ms=8){ try { if (!RM && navigator.vibrate) navigator.vibrate(ms); } catch(e){} }
@@ -493,7 +493,7 @@ function go(n){
   if (STEPS[S.step].t === 'anamnese') LAST.thermo = 0;
   render(); animateAfterRender(true);
   window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
-  if (STEPS[S.step].t === 'final' && STEPS[from].t === 'mapa') setTimeout(confetti, 250);
+  if (STEPS[S.step].t === 'final' && from !== S.step) setTimeout(confetti, 250);
 }
 function rerenderKeepScroll(){ const y = window.scrollY; render(); window.scrollTo(0, y); animateAfterRender(false); }
 
@@ -584,6 +584,7 @@ function buildPrint(){
 
 if (S.step >= STEPS.length) S.step = 0;
 render(); animateAfterRender(true);
+if (STEPS[S.step].t === 'final') setTimeout(confetti, 400);
 </script>
 </body>
 </html>
